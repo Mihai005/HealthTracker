@@ -1,0 +1,13 @@
+package com.healthtracker.tracker_api.repository;
+
+import com.healthtracker.tracker_api.table.DailyLog;
+import com.healthtracker.tracker_api.table.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.time.LocalDate;
+import java.util.Optional;
+
+@Repository
+public interface DailyLogRepository extends JpaRepository<DailyLog, Integer> {
+    Optional<DailyLog> findDailyLogByUserAndLogDate(User user, LocalDate logDate);
+}
