@@ -1,0 +1,155 @@
+package com.healthtracker.tracker_api.service;
+
+import com.healthtracker.tracker_api.model.MealModel;
+import com.healthtracker.tracker_api.model.MealModel.MealType;
+import com.healthtracker.tracker_api.model.StepsModel;
+import com.healthtracker.tracker_api.model.WaterModel;
+import com.healthtracker.tracker_api.repository.DailyLogRepository;
+import com.healthtracker.tracker_api.repository.MealRepository;
+import com.healthtracker.tracker_api.repository.UserRepository;
+import com.healthtracker.tracker_api.table.DailyLog;
+import com.healthtracker.tracker_api.table.Meal;
+import com.healthtracker.tracker_api.table.User;
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class DailyLogService {
+
+    private final UserRepository userRepository;
+    private final DailyLogRepository dailyLogRepository;
+    private final MealRepository mealRepository;
+
+    public DailyLogService(UserRepository userRepository, DailyLogRepository dailyLogRepository, MealRepository mealRepository) {
+        this.userRepository = userRepository;
+        this.dailyLogRepository = dailyLogRepository;
+        this.mealRepository = mealRepository;
+    }
+
+    public Meal addMeal(MealModel meal) throws Exception {
+        User user = this.userRepository.findByUserName(meal.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<DailyLog> log = this.dailyLogRepository.findDailyLogByUserAndLogDate(user, LocalDate.now());
+        int calories;
+        try {
+            calories = Integer.parseInt(meal.getCalories());
+        }
+        catch (Exception ex) {
+            throw new Exception("Calories need to be an integer");
+        }
+        MealType type;
+        try {
+            type = MealType.valueOf(meal.getType());
+        }
+        catch (Exception ex) {
+            throw new Exception("Invalid type of meal");
+        }
+        if (log.isEmpty()) {
+            DailyLog newLog = new DailyLog();
+            newLog.setUser(user);
+            newLog.setLogDate(LocalDate.now());
+            newLog.setWaterIntake(0);
+            newLog.setStepsTaken(0);
+            this.dailyLogRepository.save(newLog);
+            Meal newMeal = new Meal();
+            newMeal.setLog(newLog);
+            newMeal.setMealType(type);
+            newMeal.setCalories(calories);
+            return this.mealRepository.save(newMeal);
+        }
+        else {
+            Meal newMeal = new Meal();
+            newMeal.setLog(log.orElseThrow());
+            newMeal.setMealType(type);
+            newMeal.setCalories(calories);
+            return this.mealRepository.save(newMeal);
+        }
+    }
+
+    public void addWater(WaterModel waterModel) throws Exception {
+        int waterQuantity;
+        try {
+            waterQuantity = Integer.parseInt(waterModel.getQuantity());
+        }
+        catch (Exception ex) {
+            throw new Exception("Water quantity has to be an integer");
+        }
+
+        User user = this.userRepository.findByUserName(waterModel.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<DailyLog> log = this.dailyLogRepository.findDailyLogByUserAndLogDate(user, LocalDate.now());
+        if (log.isEmpty()) {
+            DailyLog newLog = new DailyLog();
+            newLog.setUser(user);
+            newLog.setLogDate(LocalDate.now());
+            newLog.setWaterIntake(waterQuantity);
+            newLog.setStepsTaken(0);
+            this.dailyLogRepository.save(newLog);
+        }
+        else {
+            DailyLog dailyLog = log.get();
+            dailyLog.setWaterIntake(dailyLog.getWaterIntake() + waterQuantity);
+            this.dailyLogRepository.save(dailyLog);
+        }
+    }
+
+    public DailyLog getDailyLog(String username) {
+        User user = this.userRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<DailyLog> log =  this.dailyLogRepository.findDailyLogByUserAndLogDate(user, LocalDate.now());
+        if (log.isEmpty()) {
+            DailyLog newLog = new DailyLog();
+            newLog.setUser(user);
+            newLog.setLogDate(LocalDate.now());
+            newLog.setWaterIntake(0);
+            newLog.setStepsTaken(0);
+            this.dailyLogRepository.save(newLog);
+            return newLog;
+        }
+        return log.get();
+    }
+
+    public List<Meal> getDailyLogMeals(String username) {
+        User user = this.userRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<DailyLog> log = this.dailyLogRepository.findDailyLogByUserAndLogDate(user, LocalDate.now());
+
+        if (log.isPresent()) {
+            DailyLog dailyLog = log.get();
+            return dailyLog.getMeals();
+        }
+        else {
+            return new ArrayList<Meal>();
+        }
+    }
+
+    public void addSteps(StepsModel stepsModel) throws Exception {
+        int steps;
+        try {
+            steps = Integer.parseInt(stepsModel.getSteps());
+        }
+        catch (Exception ex) {
+            throw new Exception("Water quantity has to be an integer");
+        }
+
+        User user = this.userRepository.findByUserName(stepsModel.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<DailyLog> log = this.dailyLogRepository.findDailyLogByUserAndLogDate(user, LocalDate.now());
+        if (log.isEmpty()) {
+            DailyLog newLog = new DailyLog();
+            newLog.setUser(user);
+            newLog.setLogDate(LocalDate.now());
+            newLog.setWaterIntake(0);
+            newLog.setStepsTaken(steps);
+            this.dailyLogRepository.save(newLog);
+        }
+        else {
+            DailyLog dailyLog = log.get();
+            dailyLog.setStepsTaken(dailyLog.getStepsTaken() + steps);
+            this.dailyLogRepository.save(dailyLog);
+        }
+    }
+}
