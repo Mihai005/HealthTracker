@@ -1,0 +1,42 @@
+package com.healthtracker.tracker_api.table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Entity
+@Table(name = "DailyLog", schema = "dbo")
+public class DailyLog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "logId")
+    private int logId;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable = false)
+    @JsonIgnore
+    private User user;
+
+    @Setter
+    @Column(name = "logDate", nullable = false)
+    private LocalDate logDate;
+
+    @Setter
+    @Column(name = "waterIntake", nullable = false)
+    private int waterIntake;
+
+    @Setter
+    @Column(name = "stepsTaken", nullable = false)
+    private int stepsTaken;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "log", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Meal> meals = new ArrayList<>();
+}
