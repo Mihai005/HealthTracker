@@ -1,0 +1,18 @@
+package com.healthtracker.tracker_api.model;
+
+import lombok.Getter;
+
+@Getter
+public class GoalModel {
+    private final String username;
+    private final String calorieGoal;
+    private final String waterGoal;
+    private final String stepsGoal;
+
+    public GoalModel(String username, String calorieGoal, String waterGoal, String stepsGoal) {
+        this.username = username;
+        this.calorieGoal = calorieGoal;
+        this.waterGoal = waterGoal;
+        this.stepsGoal = stepsGoal;
+    }
+}
