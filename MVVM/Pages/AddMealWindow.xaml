@@ -1,0 +1,28 @@
+﻿<Window x:Class="HealthTrackerMVVM.Pages.AddMealWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HealthTrackerMVVM.Pages"
+        mc:Ignorable="d"
+        Title="Add Meal" Background="Black" Height="450" Width="800">
+    
+    <StackPanel Margin="20">
+        <TextBlock Text="Select Meal Type:" Foreground="White"/>
+        <ComboBox x:Name="MealTypeCombo" Margin="0,5" SelectedIndex="0">
+            <ComboBoxItem>Breakfast</ComboBoxItem>
+            <ComboBoxItem>Lunch</ComboBoxItem>
+            <ComboBoxItem>Dinner</ComboBoxItem>
+            <ComboBoxItem>Snack</ComboBoxItem>
+        </ComboBox>
+
+        <TextBlock Text="Calories:" Margin="0,10,0,0" Foreground="White"/>
+        <TextBox x:Name="CaloriesInput" Margin="0,5" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="OK" Width="80" Margin="5,0" Click="Ok_Click"/>
+            <Button Content="Cancel" Width="80" Margin="5,0" Click="Cancel_Click"/>
+        </StackPanel>
+    </StackPanel>
+    
+</Window>

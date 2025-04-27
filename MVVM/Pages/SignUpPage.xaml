@@ -1,0 +1,63 @@
+﻿<Page x:Class="HealthTrackerMVVM.Pages.SignUpPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:HealthTrackerMVVM.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SignUpPage" Background="Black" Foreground="White">
+    
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="20">
+            <TextBlock Text="Username" FontSize="14" FontWeight="SemiBold" Margin="5,10,5,0"/>
+            <TextBox x:Name="usernameBox"
+                 Background="#2C2C2C"
+                 Foreground="White"
+                 FontSize="14"
+                 Padding="10"
+                 BorderThickness="0"/>
+
+            <TextBlock Text="Password" FontSize="14" FontWeight="SemiBold" Margin="5,10,5,0"/>
+            <PasswordBox x:Name="passwordBox"
+                     Background="#2C2C2C"
+                     Foreground="White"
+                     FontSize="14"
+                     Padding="10"
+                     BorderThickness="0"/>
+
+            <TextBlock Text="Confirm Password" FontSize="14" FontWeight="SemiBold" Margin="5,10,5,0"/>
+            <PasswordBox x:Name="confirmPasswordBox"
+                     Background="#2C2C2C"
+                     Foreground="White"
+                     FontSize="14"
+                     Padding="10"
+                     BorderThickness="0"/>
+
+            <Button x:Name="signin"
+                Content="Sign Up"
+                Click="SignUp_Clicked"
+                Background="#4CAF50"
+                Foreground="White"
+                FontWeight="Bold"
+                Padding="10"
+                Margin="0,20,0,0"
+                BorderThickness="0"
+                HorizontalAlignment="Center"
+                Width="120"/>
+
+            <Button Content="← Go Back"
+                Click="GoBack_Clicked"
+                Height="35"
+                Background="Transparent"
+                Foreground="White"
+                BorderBrush="#4CAF50"
+                BorderThickness="1"
+                Margin="0,10,0,0"
+                FontWeight="Normal"
+                HorizontalAlignment="Center"
+                Width="120"/>
+        </StackPanel>
+    </Grid>
+    
+</Page>
