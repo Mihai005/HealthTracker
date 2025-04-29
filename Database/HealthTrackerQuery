@@ -1,0 +1,27 @@
+create table Users(
+userId int primary key identity (1, 1),
+userName varchar(255) not null,
+userPassword varchar(100) not null
+)
+
+create table Goal(
+userId int primary key references Users(userId) ON DELETE CASCADE,
+calorieGoal int not null,
+waterGoal int not null,
+stepsGoal int not null
+)
+
+create table DailyLog(
+logId int primary key identity(1, 1),
+userId int references Users(userId),
+logDate DATE NOT NULL,
+waterIntake INT NOT NULL DEFAULT 0,
+stepsTaken INT NOT NULL DEFAULT 0
+)
+
+create table Meal(
+mealId int primary key identity(1, 1),
+logId int references DailyLog(logId) ON DELETE CASCADE,
+mealType nvarchar(20) NOT NULL CHECK (mealType IN ('Breakfast', 'Lunch', 'Dinner', 'Snack')),
+calories int not null
+)
